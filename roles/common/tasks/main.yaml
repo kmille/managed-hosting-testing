@@ -1,0 +1,65 @@
+---
+
+- name: Install base tools
+  apt: name={{ item }} state=present
+  with_items:
+    - git
+    - tmux
+    - vim
+    - curl
+    - watch
+
+- name: Install debug tools
+  apt: 
+    pkg: 
+      - htop
+      - nicstat
+      - linux-tools-common
+      - bpfcc-tools
+  # todo: linux-headers-$(uname -r)
+
+- name: Clone dotfiles repo
+  git:
+    repo: 'https://github.com/kmille/dotfiles'
+    dest: /opt/repos/dotfiles
+
+
+- name: Install dotfiles (vimrc)
+  copy:
+    src: /opt/repos/dotfiles/vimrc
+    dest: /root/.vimrc
+    owner: root
+    group: root
+    mode: '0644'
+    remote_src: yes
+
+
+- name: Install dotfiles (tmux)
+  copy:
+    src: /opt/repos/dotfiles/tmux.conf
+    dest: /etc/tmux.conf
+    owner: root
+    group: root
+    mode: '0644'
+    remote_src: yes
+
+
+- name: Install dotfiles (bash_aliases)
+  copy:
+    src: /opt/repos/dotfiles/bash_aliases
+    dest: /root/.bash_aliases
+    owner: root
+    group: root
+    mode: '0644'
+    remote_src: yes
+
+
+- name: Install dotfiles (dircolors)
+  copy:
+    src: /opt/repos/dotfiles/dircolors
+    dest: /root/.dircolors
+    owner: root
+    group: root
+    mode: '0644'
+    remote_src: yes
+
