@@ -1,0 +1,14 @@
+---
+
+- name: Install haproxy
+  apt:
+    name: haproxy
+    state: present
+
+- name: Copy haproxy config
+  copy:
+    src: haproxy.cfg
+    dest: /etc/haproxy/haproxy.cfg
+    owner: root
+    group: root
+    mode: '0644'

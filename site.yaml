@@ -1,4 +1,12 @@
 ---
+
+
 - hosts: all
   roles:
-    - common
+   - common
+
+- hosts: loadbalancer
+  roles:
+    - lb
+  tags:
+    - lb

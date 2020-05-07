@@ -1,2 +1,3 @@
 [loadbalancer]
-kmille-solutions-lb01.cloud.dev
+kmille-solutions-lb01.cloud.dev ip_static=192.168.33.11
+kmille-solutions-lb02.cloud.dev ip_static=192.168.33.12
