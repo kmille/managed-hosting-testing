@@ -16,15 +16,14 @@ Vagrant.configure("2") do |config|
   config.vm.box = "ubuntu/bionic64"
 
   if Vagrant.has_plugin?("vagrant-vbguest")
-    config.vbguest.auto_update = true
-    config.vbguest.no_remote = true
+    config.vbguest.auto_update = false
   end
 
 
   config.vm.define "lb01" do |vmConfig|
     vmConfig.vm.provision "shell", inline: $init, privileged: true
-    config.vm.network "private_network", ip: "192.168.33.11"
-    config.vm.hostname = "kmille-solutions-lb01.cloud.dev"
+    vmConfig.vm.network "private_network", ip: "192.168.33.11"
+    vmConfig.vm.hostname = "kmille-solutions-lb01.cloud.dev"
 
     vmConfig.vm.provider "virtualbox" do |vb|
       vb.name = "lb01"
@@ -36,8 +35,8 @@ Vagrant.configure("2") do |config|
   
   config.vm.define "lb02" do |vmConfig|
     vmConfig.vm.provision "shell", inline: $init, privileged: true
-    config.vm.network "private_network", ip: "192.168.33.12"
-    config.vm.hostname = "kmille-solutions-lb02.cloud.dev"
+    vmConfig.vm.network "private_network", ip: "192.168.33.12"
+    vmConfig.vm.hostname = "kmille-solutions-lb02.cloud.dev"
 
     vmConfig.vm.provider "virtualbox" do |vb|
       vb.name = "lb02"

@@ -9,8 +9,8 @@ Host kmille-solutions-lb01 kmille-solutions-lb01.cloud.dev
     AddKeysToAgent no
 
 
-Host kmille-solutions-lb01 kmille-solutions-lb02.cloud.dev
-    Hostname 192.168.33.11
+Host kmille-solutions-lb02 kmille-solutions-lb02.cloud.dev
+    Hostname 192.168.33.12
     User root
     IdentityFile /home/kmille/projects/managed-hosting-testing/lab-key
     ForwardAgent no

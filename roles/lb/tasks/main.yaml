@@ -5,10 +5,50 @@
     name: haproxy
     state: present
 
+
+- name: Allow binding non local ports
+  sysctl:
+    name: net.ipv4.ip_nonlocal_bind
+    value: '1'
+    state: present
+    reload: yes
+    sysctl_set: yes
+
+
 - name: Copy haproxy config
-  copy:
-    src: haproxy.cfg
+  template:
+    src: haproxy.cfg.j2
     dest: /etc/haproxy/haproxy.cfg
     owner: root
     group: root
     mode: '0644'
+
+
+- name: Reload haproxy
+  service:
+    name: haproxy
+    state: reloaded
+
+- name: Install HA software
+  apt:
+    name: ['pacemaker', 'corosync', 'crmsh']
+    state: present
+
+- name: Copy corosync config
+  template:
+    src: corosync.conf.j2
+    dest: /etc/corosync/corosync.conf
+    owner: root
+    group: root
+    mode: '0644'
+    
+    
+- name: Restart corosync
+  service:
+    name: corosync
+    state: restarted
+    
+- name: Add HA-IP resource 
+  shell: 'crm resource list | grep -q ip_192_168_33_10 || crm configure primitive ip_192_168_33_10 ocf:heartbeat:IPaddr2 params ip="192.168.33.10" cidr_netmask="24" nic="enp0s8" op monitor interval="10s" timeout="20s"'
+  run_once: true
+

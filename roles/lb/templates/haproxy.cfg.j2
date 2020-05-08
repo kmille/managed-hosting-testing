@@ -35,4 +35,19 @@ defaults
         errorfile 502 /etc/haproxy/errors/502.http
         errorfile 503 /etc/haproxy/errors/503.http
         errorfile 504 /etc/haproxy/errors/504.http
-# jo das tut
+
+
+frontend fe_webapp_prod
+  bind {{ ha_ip }}:80
+  mode  http
+  reqidel  ^X-Forwarded-Proto
+  reqadd  X-Forwarded-Proto:\ http unless { ssl_fc }
+  reqadd  X-Forwarded-Proto:\ https if { ssl_fc }
+  default_backend be_webapp_prod
+
+backend be_webapp_prod
+  server webapp1 httpbin.org
+  server webapp2 httpbin.org
+
+
+

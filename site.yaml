@@ -4,9 +4,13 @@
 - hosts: all
   roles:
    - common
+  tags:
+   - common
 
 - hosts: loadbalancer
   roles:
     - lb
   tags:
     - lb
+  vars:
+    ha_ip: 192.168.33.10

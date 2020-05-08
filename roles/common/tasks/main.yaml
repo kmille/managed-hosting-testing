@@ -16,6 +16,7 @@
     - vim
     - curl
     - watch
+    #- ripgrep not there for 18.04 :/
 
 
 - name: Install debug tools
@@ -26,6 +27,8 @@
       - linux-tools-common
       - bpfcc-tools
       - "linux-headers-{{ ansible_kernel }}"
+      - tcpdump
+      - ngrep
 
 
 - name: Clone dotfiles repo
@@ -73,3 +76,14 @@
     mode: '0644'
     remote_src: yes
 
+
+- name: Create directory structure for vim plugins
+  file:
+    path: /root/.vim/autoload
+    state: directory
+
+
+- name: Install vimplug
+  get_url:
+    url: https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+    dest: /root/.vim/autoload/plug.vim    
