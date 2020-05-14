@@ -25,10 +25,16 @@
       - htop
       - nicstat
       - linux-tools-common
-      - bpfcc-tools
-      - "linux-headers-{{ ansible_kernel }}"
       - tcpdump
       - ngrep
+
+
+- name: Install the hot shit only on newer machines
+  apt:
+    pkg:
+      - bpfcc-tools
+      - "linux-headers-{{ ansible_kernel }}"
+  when: ansible_os_family == "Debian" and ansible_distribution_version == "18.04"
 
 
 - name: Clone dotfiles repo
