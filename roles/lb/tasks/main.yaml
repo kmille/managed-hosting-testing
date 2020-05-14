@@ -48,7 +48,18 @@
     name: corosync
     state: restarted
     
-- name: Add HA-IP resource 
+    
+- name: 'crm: disable STONITH'
+  shell: 'crm configure show | grep stonith-enabled -q || crm configure property stonith-enabled=false'
+  run_once: true
+    
+  
+- name: 'crm: disable quorum'
+  shell: 'crm configure show | grep no-quorum-policy -q || crm configure property no-quorum-policy=ignore'
+  run_once: true
+  
+  
+- name: 'crm configure ha ip'
   shell: 'crm resource list | grep -q ip_192_168_33_10 || crm configure primitive ip_192_168_33_10 ocf:heartbeat:IPaddr2 params ip="192.168.33.10" cidr_netmask="24" nic="enp0s8" op monitor interval="10s" timeout="20s"'
   run_once: true
 
