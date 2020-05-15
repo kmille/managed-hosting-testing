@@ -1,0 +1,29 @@
+---
+
+- name: Install mariadb-server
+  apt:
+    name: mariadb-server
+    state: present
+
+
+- name: clone test db from github
+  git:
+    repo: https://github.com/datacharmer/test_db
+    dest: /opt/test_db
+
+    
+- name: enable BLACKHOLE module in mariadb
+  ini_file:
+    path: /etc/mysql/mariadb.conf.d/50-server.cnf
+    section: mariadb
+    option: plugin_load_add
+    value: ha_blackhole
+  notify: 
+    - restart mariadb
+
+    
+- name: Fill database with dummy data
+  shell: 
+    cmd: mysql < employees.sql
+    chdir: /opt/test_db
+    creates: /var/lib/mysql/employees

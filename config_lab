@@ -17,3 +17,21 @@ Host kmille-solutions-lb02 kmille-solutions-lb02.cloud.dev
     StrictHostKeyChecking no
     AddKeysToAgent no
 
+
+Host kmille-solutions-app01 kmille-solutions-app01.cloud.dev
+    Hostname 192.168.33.21
+    User root
+    IdentityFile /home/kmille/projects/managed-hosting-testing/lab-key
+    ForwardAgent no
+    StrictHostKeyChecking no
+    AddKeysToAgent no
+
+
+Host kmille-solutions-db01 kmille-solutions-db01.cloud.dev
+    Hostname 192.168.33.31
+    User root
+    IdentityFile /home/kmille/projects/managed-hosting-testing/lab-key
+    ForwardAgent no
+    StrictHostKeyChecking no
+    AddKeysToAgent no
+
