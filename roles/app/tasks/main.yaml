@@ -1,0 +1,68 @@
+---
+
+- name: Install Java + Tomcat
+  apt:
+    state: present
+    pkg:
+      - tomcat8
+      - openjdk-8-jdk-headless
+      - libmysql-java # contains /usr/share/java/mysql.jar
+
+
+- name: Copy servlet library
+  copy:
+    src: servlet-api.jar
+    dest: /var/lib/tomcat8/lib
+
+
+- name: create symlink for third party dependency (mysql)
+  file:
+    state: link
+    src: /usr/share/java/mysql.jar
+    dest: /var/lib/tomcat8/lib/mysql-connector-java.jar
+    
+    
+- name: Copy src files
+  copy:
+    src: src/
+    dest: /opt/src
+  tags: deploy-app
+
+
+- name: Build class files
+  shell:
+    cmd: javac -cp .:/var/lib/tomcat8/lib/servlet-api.jar InsertData.java
+    chdir: /opt/src
+  tags: deploy-app
+
+
+- name: Create webapp directory
+  file:
+    state: directory
+    dest: /var/lib/tomcat8/webapps/tmp/WEB-INF/classes/
+  tags: deploy-app
+
+    
+- name: Copy web.xml
+  copy:
+    src: web.xml
+    dest: /var/lib/tomcat8/webapps/tmp/WEB-INF/web.xml
+  tags: deploy-app
+
+
+- name: Ansible sucks... let's do it this way
+  find: 
+    paths: /opt/src
+    patterns: "*.class"
+  register: all_class_files
+  tags: deploy-app
+  
+  
+- name: Copy class files
+  copy:
+    src: "{{ item.path }}"
+    dest: /var/lib/tomcat8/webapps/tmp/WEB-INF/classes/
+    remote_src: yes
+  tags: deploy-app
+  with_items: "{{ all_class_files.files }}"
+  notify: restart tomcat

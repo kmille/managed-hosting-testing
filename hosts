@@ -5,5 +5,8 @@ kmille-solutions-lb02.cloud.dev ip_static=192.168.33.12
 [app]
 kmille-solutions-app01.cloud.dev
 
+[app]
+kmille-solutions-app01.cloud.dev
+
 [db]
 kmille-solutions-db01.cloud.dev

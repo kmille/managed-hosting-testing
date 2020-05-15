@@ -22,6 +22,16 @@
     - restart mariadb
 
     
+- name: enable BLACKHOLE module in mariadb
+  ini_file:
+    path: /etc/mysql/mariadb.conf.d/50-server.cnf
+    section: mysqld
+    option: bind-address
+    value: 0.0.0.0
+  notify: 
+    - restart mariadb
+    
+    
 - name: Fill database with dummy data
   shell: 
     cmd: mysql < employees.sql
