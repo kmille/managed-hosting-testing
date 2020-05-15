@@ -14,3 +14,10 @@
     - lb
   vars:
     ha_ip: 192.168.33.10
+
+
+- hosts: db
+  roles:
+    - db
+  tags:
+    - db

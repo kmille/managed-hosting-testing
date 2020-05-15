@@ -16,7 +16,10 @@
     - vim
     - curl
     - watch
-    #- ripgrep not there for 18.04 :/
+    - tree
+    - "linux-headers-{{ ansible_kernel }}"
+    - sysstat
+    - linux-tools-generic
 
 
 - name: Install debug tools
@@ -33,7 +36,7 @@
   apt:
     pkg:
       - bpfcc-tools
-      - "linux-headers-{{ ansible_kernel }}"
+      #- ripgrep not there for 18.04 :/
   when: ansible_os_family == "Debian" and ansible_distribution_version == "18.04"
 
 

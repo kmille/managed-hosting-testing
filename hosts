@@ -1,3 +1,9 @@
 [loadbalancer]
 kmille-solutions-lb01.cloud.dev ip_static=192.168.33.11
 kmille-solutions-lb02.cloud.dev ip_static=192.168.33.12
+
+[app]
+kmille-solutions-app01.cloud.dev
+
+[db]
+kmille-solutions-db01.cloud.dev
