@@ -43,6 +43,8 @@ frontend fe_webapp_prod
   reqidel  ^X-Forwarded-Proto
   reqadd  X-Forwarded-Proto:\ http unless { ssl_fc }
   reqadd  X-Forwarded-Proto:\ https if { ssl_fc }
+  http-response set-header X-Loadbalancer %H
+  http-response set-header X-Backend %s
   default_backend be_webapp_prod
 
 backend be_webapp_prod

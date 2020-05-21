@@ -6,13 +6,13 @@
     state: present
 
 
-- name: Allow binding non local ports
-  sysctl:
-    name: net.ipv4.ip_nonlocal_bind
-    value: '1'
-    state: present
-    reload: yes
-    sysctl_set: yes
+#- name: Allow binding non local ports
+#  sysctl:
+#    name: net.ipv4.ip_nonlocal_bind
+#    value: '1'
+#    state: present
+#    reload: yes
+#    sysctl_set: yes
 
 
 - name: Copy haproxy config
@@ -59,7 +59,18 @@
   run_once: true
   
   
-- name: 'crm configure ha ip'
+- name: 'crm: configure ha ip'
   shell: 'crm resource list | grep -q ip_192_168_33_10 || crm configure primitive ip_192_168_33_10 ocf:heartbeat:IPaddr2 params ip="192.168.33.10" cidr_netmask="24" nic="enp0s8" op monitor interval="10s" timeout="20s"'
+  run_once: true
+
+
+- name: 'crm: configure haproxy'
+  shell: 'crm resource list | grep -q service_haproxy || crm configure primitive service_haproxy systemd:haproxy op monitor interval="5" timeout="10"'
+  run_once: true
+
+
+- name: 'crm: create resource group'
+  # tested: this implies the order! first ip_192_168_33_10 then service_haproxy'
+  shell: 'crm resource list | grep -q kmille-cluster-group || crm configure group kmille-cluster-group ip_192_168_33_10 service_haproxy'
   run_once: true
 
