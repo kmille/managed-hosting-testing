@@ -12,16 +12,22 @@
    </servlet>
    
    <servlet>
-      <servlet-name>InsertData</servlet-name>
-      <servlet-class>InsertData</servlet-class>
+      <servlet-name>GetAllEmployees</servlet-name>
+      <servlet-class>GetAllEmployees</servlet-class>
    </servlet>
  
    <!-- Note: All <servlet> elements MUST be grouped together and
      placed IN FRONT of the <servlet-mapping> elements -->
+         
+
+   <servlet-mapping>
+      <servlet-name>HelloWorld</servlet-name>
+      <url-pattern>/HelloWorld</url-pattern>
+   </servlet-mapping>
  
    <servlet-mapping>
-      <servlet-name>InsertData</servlet-name>
-      <url-pattern>/InsertData</url-pattern>
+      <servlet-name>GetAllEmployees</servlet-name>
+      <url-pattern>/list</url-pattern>
    </servlet-mapping>
 </web-app>
 

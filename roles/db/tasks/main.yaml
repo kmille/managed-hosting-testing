@@ -2,8 +2,11 @@
 
 - name: Install mariadb-server
   apt:
-    name: mariadb-server
+    name: "{{ item }}"
     state: present
+  with_items:
+    - mariadb-server
+    - python-pymysql
 
 
 - name: clone test db from github
@@ -37,3 +40,12 @@
     cmd: mysql < employees.sql
     chdir: /opt/test_db
     creates: /var/lib/mysql/employees
+
+- name: create db user for application
+  mysql_user:
+    login_unix_socket: /var/run/mysqld/mysqld.sock
+    name: app
+    password: secret-db-password
+    host: '%'
+    priv: "employees.*:ALL"
+    state: present

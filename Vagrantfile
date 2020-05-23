@@ -50,7 +50,7 @@ Vagrant.configure("2") do |config|
   
   config.vm.define "app01" do |vmConfig|
     vmConfig.vm.box = "ubuntu/xenial64" # 16.04
-    vmConfig.vm.network "forwarded_port", guest: 8080, host: 8080
+    vmConfig.vm.network "forwarded_port", guest: 8080, host: 8021
 
     vmConfig.vm.provision "shell", inline: $init, privileged: true
     vmConfig.vm.network "private_network", ip: "192.168.33.21"
@@ -59,7 +59,24 @@ Vagrant.configure("2") do |config|
     vmConfig.vm.provider "virtualbox" do |vb|
       vb.name = "app01"
       vb.cpus = 1
-      vb.memory = 512
+      vb.memory = 1024
+      vb.linked_clone = true
+    end
+  end
+  
+  
+  config.vm.define "app02" do |vmConfig|
+    vmConfig.vm.box = "ubuntu/xenial64" # 16.04
+    vmConfig.vm.network "forwarded_port", guest: 8080, host: 8022
+
+    vmConfig.vm.provision "shell", inline: $init, privileged: true
+    vmConfig.vm.network "private_network", ip: "192.168.33.22"
+    vmConfig.vm.hostname = "kmille-solutions-app02.cloud.dev"
+
+    vmConfig.vm.provider "virtualbox" do |vb|
+      vb.name = "app02"
+      vb.cpus = 1
+      vb.memory = 1024
       vb.linked_clone = true
     end
   end

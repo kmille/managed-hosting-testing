@@ -37,6 +37,7 @@
     pkg:
       - bpfcc-tools
       #- ripgrep not there for 18.04 :/
+      # findfd?
   when: ansible_os_family == "Debian" and ansible_distribution_version == "18.04"
 
 

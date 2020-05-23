@@ -9,19 +9,25 @@
       - libmysql-java # contains /usr/share/java/mysql.jar
 
 
-- name: Copy servlet library
-  copy:
-    src: servlet-api.jar
-    dest: /var/lib/tomcat8/lib
-
-
-- name: create symlink for third party dependency (mysql)
+- name: create symlink for mysql dependency
   file:
     state: link
     src: /usr/share/java/mysql.jar
     dest: /var/lib/tomcat8/lib/mysql-connector-java.jar
     
-    
+
+- name: Copy servlet library
+  copy:
+    src: lib/servlet-api.jar
+    dest: /var/lib/tomcat8/lib
+
+
+- name: Copy json library
+  copy:
+    src: lib/json-simple.jar
+    dest: /var/lib/tomcat8/lib
+
+
 - name: Copy src files
   copy:
     src: src/
@@ -29,9 +35,23 @@
   tags: deploy-app
 
 
-- name: Build class files
+- name: Build class file for HelloWorld.java
   shell:
-    cmd: javac -cp .:/var/lib/tomcat8/lib/servlet-api.jar InsertData.java
+    cmd: javac -cp .:/var/lib/tomcat8/lib/servlet-api.jar HelloWorld.java
+    chdir: /opt/src
+  tags: deploy-app
+
+
+- name: Build class file for GetAllEmployees.java
+  shell:
+    cmd: javac -cp .:/var/lib/tomcat8/lib/servlet-api.jar:/var/lib/tomcat8/lib/json-simple.jar GetAllEmployees.java
+    chdir: /opt/src
+  tags: deploy-app
+
+
+- name: Build class file for Status.jar
+  shell:
+    cmd: javac -cp .:/var/lib/tomcat8/lib/servlet-api.jar:/var/lib/tomcat8/lib/json-simple.jar Status.java
     chdir: /opt/src
   tags: deploy-app
 
@@ -39,14 +59,14 @@
 - name: Create webapp directory
   file:
     state: directory
-    dest: /var/lib/tomcat8/webapps/tmp/WEB-INF/classes/
+    dest: /var/lib/tomcat8/webapps/api/WEB-INF/classes/
   tags: deploy-app
 
     
 - name: Copy web.xml
   copy:
     src: web.xml
-    dest: /var/lib/tomcat8/webapps/tmp/WEB-INF/web.xml
+    dest: /var/lib/tomcat8/webapps/api/WEB-INF/web.xml
   tags: deploy-app
 
 
@@ -61,7 +81,7 @@
 - name: Copy class files
   copy:
     src: "{{ item.path }}"
-    dest: /var/lib/tomcat8/webapps/tmp/WEB-INF/classes/
+    dest: /var/lib/tomcat8/webapps/api/WEB-INF/classes/
     remote_src: yes
   tags: deploy-app
   with_items: "{{ all_class_files.files }}"
