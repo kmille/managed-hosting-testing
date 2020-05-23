@@ -86,6 +86,16 @@
     remote_src: yes
 
 
+- name: Install dotfiles (dircolors)
+  copy:
+    src: /opt/repos/dotfiles/gitconfig
+    dest: /root/.gitconfig
+    owner: root
+    group: root
+    mode: '0644'
+    remote_src: yes
+
+
 - name: Create directory structure for vim plugins
   file:
     path: /root/.vim/autoload

@@ -75,7 +75,7 @@ Vagrant.configure("2") do |config|
     vmConfig.vm.provider "virtualbox" do |vb|
       vb.name = "db01"
       vb.cpus = 1
-      vb.memory = 512
+      vb.memory = 1024
       vb.linked_clone = true
     end
   end
