@@ -9,6 +9,13 @@
       - libmysql-java # contains /usr/share/java/mysql.jar
 
 
+- name: Add /etc/default/tomcat8 config file 
+  copy: 
+    src: tomcat8
+    dest: /etc/default/tomcat8
+  notify: restart tomcat
+
+
 - name: create symlink for mysql dependency
   file:
     state: link

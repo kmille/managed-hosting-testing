@@ -48,8 +48,6 @@ frontend fe_webapp_prod
   default_backend be_webapp_prod
 
 backend be_webapp_prod
-  server webapp1 httpbin.org
-  server webapp2 httpbin.org
-
-
-
+  option httpchk GET /api/status
+  server app01 192.168.33.21:8080 check inter 5s
+  server app02 192.168.33.22:8080 check inter 5s

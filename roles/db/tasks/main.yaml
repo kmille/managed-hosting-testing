@@ -41,6 +41,7 @@
     chdir: /opt/test_db
     creates: /var/lib/mysql/employees
 
+
 - name: create db user for application
   mysql_user:
     login_unix_socket: /var/run/mysqld/mysqld.sock
