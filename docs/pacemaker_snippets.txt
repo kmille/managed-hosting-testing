@@ -1,0 +1,98 @@
+192.168.33.11   kmille-solutions-lb01
+192.168.33.12   kmille-solutions-lb02
+
+crm configure property stonith-enabled=false
+crm configure property no-quorum-policy=ignore
+
+
+crm configure primitive ip_192_168_33_10 ocf:heartbeat:IPaddr2 params ip="192.168.33.10" cidr_netmask="24" nic="enp0s8" op monitor interval="10s" meta migration-threshold="10s" 
+
+crm resource list/status
+
+crm resource unmanage  ip_192_168_33_10
+crm resource manage  ip_192_168_33_10
+
+crm resource stop ip_192_168_33_10
+crm resource start ip_192_168_33_10
+crm resource restart ip_192_168_33_10
+
+crm configure delete ip_192_168_33_10
+crm configure delete ip_192_168_33_10 --force
+
+
+crm resource status ip_192_168_33_10
+
+crm resource maintenance ip_192_168_33_10 true
+crm resource maintenance ip_192_168_33_10 false
+
+
+crm resource constraints ip_192_168_33_10
+
+
+crm resource operations ip_192_168_33_10
+
+
+crm resource cleanup ip_192_168_33_10
+
+
+crm configure edit ip_192_168_33_10 
+
+
+
+crm configure primitive ip_192_168_33_10 ocf:heartbeat:IPaddr2 params ip="192.168.33.10" cidr_netmask="24" nic="enp0s8" op monitor interval="10s" timeout="20s"
+
+crm configure primitive vIP1-0            ocf:heartbeat:IPaddr2 params ip="10.251.49.50" nic="eth0" cidr_netmask="25"   op monitor interval="10s" timeout="20s"
+ 
+
+remove location constraint
+crm configure delete cli-prefer-service_haproxy
+
+delete all resources
+cibadmin -E --force
+
+
+######## Apache ##########
+
+crm configure primitive service_apache ocf:heartbeat:apache params statusurl="/server-status" port="8080" op monitor depth="0" timeout="20s" interval="10" 
+
+crm configure primitive service_apache ocf:heartbeat:apache
+crm configure delete service_apache --force
+
+
+Dienst mit steuern (Apache)
+Groups
+
+######## Apache ##########
+
+
+######## Service ##########
+crm configure primitive service_haproxy systemd:haproxy op monitor interval="5" timeout="10"
+crm configure delete service_haproxy  --force
+
+######## Service ##########
+
+
+
+Resources
+https://lzone.de/cheat-sheet/Linux-HA
+https://github.com/ClusterLabs/pacemaker/blob/master/doc/pcs-crmsh-quick-ref.md
+http://www.linux-ha.org/doc/man-pages/re-ra-IPaddr2.html
+https://www.unixmen.com/adding-deleting-cluster-resources-corosync-pacemaker-2/
+https://crmsh.github.io/man-2.0/
+https://www.thegeekdiary.com/managing-resource-startup-order-in-pacemaker-cluster-managing-constraints/
+https://clusterlabs.org/pacemaker/doc/
+
+
+to test:
+- Abhängikeiten?
+- was wenn ein teil der Dienste abschmiert (ein Dienst  z. B.)
+- relocation constraint anzeigen/auflösen
+
+
+haproxy mit managed => resource systemd
+	crm configure primitive service_haproxy systemd:haproxy op monitor interval="5" timeout="10"
+
+group ip + haproxy
+	crm configure group kmille-cluster-group service_haproxy ip_192_168_33_10
+
+

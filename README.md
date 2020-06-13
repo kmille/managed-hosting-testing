@@ -1,5 +1,5 @@
 # managed hosting lab
-Test environment for a typical manged hosting environment used for testing. Easy to use with vagrant and easy to to destroy and re-deploy with a simple ansible playbook.
+Test environment for a typical manged hosting environment used for testing. Easy to use with vagrant. Easy to to destroy. Easy to re-deploy with a simple ansible playbook. `192.168.33.10` is the service ip. The loadbalancers speak with the application servers. The application server speak with the database server.
 
 
 
@@ -47,8 +47,40 @@ kmille@linbox managed-hosting-testing master % curl -v http://192.168.33.10/api/
 
 
 
+### things to test (before using it in production)
 
-## Things to tests
-## corosync
+#### loadbalancer 
+
+- stop/remove pacemaker/corosync without touching the resources it handles
+
 - split-brain between loadbalancer
+
+- upgrading software/the cluster
+
 - lb01 sees lb02 but lb02 does not see lb01
+
+- what happens if haproxy dies and goes down (e.g. reproducible segfault)?
+
+    
+
+ 
+
+### TODO
+
+- try out some Monitoring Systems (Zabbix)
+
+    - monitor tomcat
+        - how to monitor tomcat application in general?
+        - monitor status codes
+        - monitor amount of requests
+        - monitor response times
+
+- build a three-node-cluster
+
+- move a resource in pacemaker with a time constraint
+
+- take a look at `crm` (seems like a bash script wrapper, use -d )
+
+- make some load tests with `ab`
+
+    
